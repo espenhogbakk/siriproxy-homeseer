@@ -2,6 +2,7 @@ require 'cora'
 require 'siri_objects'
 require 'pp'
 require 'httparty'
+require 'open-uri'
 
 #######
 # Plugin to control Homeseer automation software.
@@ -14,7 +15,7 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
     self.host = config["host"]
   end
 
-  listen_for /run event (.*)/i do |event|
+  listen_for /trigger event (.*)/i do |event|
     run_event(event)
   end
 
@@ -22,7 +23,8 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
     say "One moment while I run the event #{event}."
 
     Thread.new {
-      page = HTTParty.get("http://#{self.host}/tenHsServer/tenHsServer.aspx?t=ab&f=RunEvent&d=#{event}").body rescue nil
+      url = URI::encode('http://#{self.host}/tenHsServer/tenHsServer.aspx?t=ab&f=RunEvent&d=#{event}')
+      page = HTTParty.get(url).body rescue nil
       say "There you go..."
       request_completed #always complete your request! Otherwise the phone will "spin" at the user!
     }

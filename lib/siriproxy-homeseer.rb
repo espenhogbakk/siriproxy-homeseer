@@ -4,7 +4,6 @@ require 'pp'
 require 'httparty'
 require 'open-uri'
 require 'nokogiri'
-require 'siriproxy-homeseer/models'
 
 #######
 # Plugin to control Homeseer automation software.

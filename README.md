@@ -25,7 +25,7 @@ on the Homeseer server.
 http://www.tenholder.net/tenware2/tenHsServer/installation.aspx
 
 If someone knows about a better HTTP API for Homeseer that don't require HTML parsing that 
-would be awesome, as the dependenci on nokogiri could be removed.
+would be awesome, as the dependency on Nokogiri could be removed.
 
 ## Usage
 
@@ -38,3 +38,6 @@ This plugin supports the following commands:
 * Run event [event]
 
 Words marked with * are optional.
+
+For the commands "Turn on/off *the lights" to work, you need to have an event in Homeseer 
+with the name "all off" and "all on".

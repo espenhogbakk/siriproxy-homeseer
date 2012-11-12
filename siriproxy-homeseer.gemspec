@@ -3,9 +3,9 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "siriproxy-homeseer"
-  s.version     = "0.0.1" 
-  s.authors     = ["espenhogbakk"]
-  s.email       = [""]
+  s.version     = "0.0.2" 
+  s.authors     = ["Espen Høgbakk"]
+  s.email       = ["espen@hogbakk.no"]
   s.homepage    = ""
   s.summary     = %q{A Siri Proxy Plugin to controll Homeseer}
   s.description = %q{This is Siri Proxy plugin. Which can be used to controll events and devies in Homeseer. It requires tenHsServer to work. }
@@ -20,4 +20,6 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
   s.add_runtime_dependency "httparty"
+  s.add_runtime_dependency "nokogiri"
 end
+

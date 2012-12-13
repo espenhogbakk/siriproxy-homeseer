@@ -33,34 +33,45 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
     request_completed
   end
   
-  #listen_for /turn on ([a-z]*)(?: in)?(?: the)? ([a-z]*)/i do |device, location|
-  #  say "Turning on #{device}."
-  #  device_code = get_device_code(device, location)
-  #  device_on(device_code)
-  #end
+  listen_for /turn (on|off) ([a-z]*)(?: in)?(?: the)? ([a-z]*)/i do |action, device_name, location|
+    room = TenHsServer::Room.new location
 
-  listen_for /turn (on|off) ([a-z]*)(?: lights)?/i do |command, device_name|
+    run_action_on_device action, room.devices, device_name
+    request_completed
+  end
+
+  listen_for /turn (on|off) ([a-z]*)(?: lights)?/i do |action, device_name|
     devices = TenHsServer::Device.all
     devices = devices.find_all {|device| device.name.downcase == device_name.downcase}
+
+    run_action_on_device action, devices, device_name
+    request_completed
+  end
+
+  private
+  # Run action on a device
+  #
+  # Takes an array of devices, figures out which one you want
+  # to run the action on, and then runs it.
+  def run_action_on_device action, devices, device_name
     if devices.empty?
       say "Sorry, I couldn't find any devices by that name."
     else
       if devices.length > 1
-        say "Hey, I found more than one device by that name, please choose which one you want to turn #{command}."
+        say "Hey, I found more than one device by that name, please choose which one you want to turn #{action}."
       else
         device = devices[0]
       end
     end
 
     if device
-      if command == 'on'
+      if action == 'on'
         device.on
       else
         device.off
       end
-      say "Turning #{command} #{device_name}."
+      say "Turning #{action} #{device_name}."
     end
-    request_completed
   end
 
 end

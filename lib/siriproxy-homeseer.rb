@@ -77,7 +77,10 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
       say "Sorry, I couldn't find any devices by that name."
     else
       if devices.length > 1
-        say "Hey, I found more than one device by that name, please choose which one you want to turn #{action}."
+        options = devices.map { |device| device.id }
+        device_id = ask "Hey, I found more than one device by that name, please choose which "\
+            "one you want to turn #{action}.", options: options
+        device = devices.find {|device| device.id == device_id }
       else
         device = devices[0]
       end

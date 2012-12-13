@@ -21,18 +21,17 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
     request_completed
   end
 
-  listen_for /turn off(?: the)? lights/i do
-    say "Lights off."
-    event = TenHsServer::Event.run "All off"
+  listen_for /turn (on|off)(?: the)? lights/i do |action|
+    if action == 'on'
+      say "Lights on."
+      event = TenHsServer::Event.run "All on"
+    else
+      say "Lights off."
+      event = TenHsServer::Event.run "All off"
+    end
     request_completed
   end
 
-  listen_for /turn on(?: the)? lights/i do
-    say "Lights on."
-    event = TenHsServer::Event.run "All on"
-    request_completed
-  end
-  
   listen_for /turn (on|off) ([a-z]*)(?: in)?(?: the)? ([a-z]*)/i do |action, device_name, location|
     room = TenHsServer::Room.new location
 

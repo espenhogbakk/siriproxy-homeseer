@@ -1,7 +1,6 @@
 require 'cora'
 require 'siri_objects'
 require 'pp'
-#require 'open-uri'
 require 'ten_hs_server'
 
 #######
@@ -36,7 +35,8 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
 
   # Turn on/off a device in a specified room
   listen_for /turn (on|off) ([a-z]*)(?: in)?(?: the)? ([a-z]*)/i do |action, device_name, room_name|
-    room = TenHsServer::Room.new room_name
+    rooms = TenHsServer::Room.all
+    room = rooms.find {|room| room.name.downcase == room_name.downcase}
 
     run_action_on_device action, room.devices, device_name
     request_completed
@@ -49,7 +49,8 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
     
     # If we couldn't find any devices, try finding a room with that name
     if devices.empty?
-      room = TenHsServer::Room.new name
+      rooms = TenHsServer::Room.all
+      room = rooms.find {|room| room.name.downcase == name.downcase}
       if room
         if action == 'on'
           room.on

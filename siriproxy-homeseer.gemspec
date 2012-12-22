@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/* 2> /dev/null`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency "ten_hs_server"
+  s.add_runtime_dependency "ten_hs_server", "~> 0.2.0"
 end

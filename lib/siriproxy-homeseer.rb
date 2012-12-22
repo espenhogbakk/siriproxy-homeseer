@@ -8,16 +8,17 @@ require 'ten_hs_server'
 ######
 
 class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
-  attr_accessor :host
+  attr_accessor :host, :client
 
   def initialize(config = {})
-    self.host = config["host"]
+    self.host = config['host']
+    self.client = TenHsServer.new host
   end
 
   # Running an event
   listen_for /run event (.*)/i do |event|
     say "Running event #{event}."
-    event = TenHsServer::Event.run event
+    event = client.event.run event
     request_completed
   end
 
@@ -25,17 +26,17 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
   listen_for /turn (on|off)(?: the)? lights/i do |action|
     if action == 'on'
       say "Lights on."
-      event = TenHsServer::Event.run "All on"
+      event = client.event.run "All on"
     else
       say "Lights off."
-      event = TenHsServer::Event.run "All off"
+      event = client.event.run "All off"
     end
     request_completed
   end
 
   # Turn on/off a device in a specified room
   listen_for /turn (on|off) ([a-z]*)(?: in)?(?: the)? ([a-z]*)/i do |action, device_name, room_name|
-    rooms = TenHsServer::Room.all
+    rooms = client.room.all
     room = rooms.find {|room| room.name.downcase == room_name.downcase}
 
     run_action_on_device action, room.devices, device_name
@@ -44,12 +45,12 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
 
   # Turn on/off a device or a room
   listen_for /turn (on|off) ([a-z]*)(?: lights)?/i do |action, name|
-    devices = TenHsServer::Device.all
+    devices = client.device.all
     devices = devices.find_all {|device| device.name.downcase == name.downcase}
     
     # If we couldn't find any devices, try finding a room with that name
     if devices.empty?
-      rooms = TenHsServer::Room.all
+      rooms = client.room.all
       room = rooms.find {|room| room.name.downcase == name.downcase}
       if room
         if action == 'on'

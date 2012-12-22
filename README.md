@@ -31,8 +31,11 @@ would be awesome, as the dependency on Nokogiri could be removed.
 
 This plugin supports the following commands:
 
-* Turn on [device]
-* Turn off [device]
+
+* Turn on [device] *in *the [room]
+* Turn off [device] *in *the [room]
+* Turn on [device|room] *lights
+* Turn off [device|room] *lights
 * Turn on *the lights
 * Turn off *the lights
 * Run event [event]

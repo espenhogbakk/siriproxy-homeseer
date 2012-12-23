@@ -34,8 +34,8 @@ This plugin supports the following commands:
 
 * Turn on *the [device] in *the [room]
 * Turn off *the [device] in *the [room]
-* Turn on *the [device|room] *lights
-* Turn off *the [device|room] *lights
+* Turn on *the [device|room]
+* Turn off *the [device|room]
 * Turn on *the lights
 * Turn off *the lights
 * Run event [event]

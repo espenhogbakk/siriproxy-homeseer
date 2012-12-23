@@ -35,7 +35,7 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
   end
 
   # Turn on/off a device in a specified room
-  listen_for /turn (on|off)(?: the)? ([a-z]*) in(?: the)? ([a-z]*)/i do |action, device_name, room_name|
+  listen_for /turn (on|off)(?: the)? ([a-z]* ?[a-z]*) in(?: the)? ([a-z]* ?[a-z]*)/i do |action, device_name, room_name|
     rooms = client.room.all
     room = rooms.find {|room| room.name.downcase == room_name.downcase}
 
@@ -44,7 +44,7 @@ class SiriProxy::Plugin::Homeseer < SiriProxy::Plugin
   end
 
   # Turn on/off a device or a room
-  listen_for /turn (on|off)(?: the)? ([a-z]*)(?: lights)?/i do |action, name|
+  listen_for /turn (on|off)(?: the)? ([a-z]* ?[a-z]*)/i do |action, name|
     devices = client.device.all
     devices = devices.find_all {|device| device.name.downcase == name.downcase}
     
